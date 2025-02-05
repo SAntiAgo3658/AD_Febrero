@@ -1,5 +1,6 @@
 package edu.cesur;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
@@ -11,8 +12,6 @@ public class Main {
         miGestorPrincipal = new GestorPrincipal();
         miGestorPrincipal.iniciar();
         miGestorCliente = new GestorCliente();
-
-
 
         menuPpal();
 
@@ -124,8 +123,17 @@ public class Main {
         if (!idEmpresa.equals(""))
             miCliente.setIdEmpresa(Integer.parseInt(idEmpresa));
 
-        miGestorCliente.update(miCliente.getId(), miCliente.getNombre(), miCliente.getApellido1(),
-                miCliente.getApellido2(), miCliente.getComercialPrincipal(), miCliente.getIdEmpresa());
+        System.out.print("Introduce fecha nueva visita(String(aaaa/mm/dd)): ");
+        String nuevaVisita = teclado.nextLine();
+        if (!nuevaVisita.equals("")) {
+            miGestorCliente.update(miCliente.getId(), miCliente.getNombre(), miCliente.getApellido1(),
+                    miCliente.getApellido2(), miCliente.getComercialPrincipal(), miCliente.getIdEmpresa(),
+                    new Date(nuevaVisita));
+        } else {
+            miGestorCliente.update(miCliente.getId(), miCliente.getNombre(), miCliente.getApellido1(),
+                    miCliente.getApellido2(), miCliente.getComercialPrincipal(), miCliente.getIdEmpresa(), null);
+
+        }
         System.out.println();
 
     }

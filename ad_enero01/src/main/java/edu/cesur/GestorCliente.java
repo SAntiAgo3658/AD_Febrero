@@ -1,5 +1,6 @@
 package edu.cesur;
 
+import java.util.Date;
 import java.util.List;
 
 public class GestorCliente {
@@ -20,7 +21,7 @@ public class GestorCliente {
     }
 
     public void update(Long id, String nombre, String apellido1, String apellido2, String comercialPrincipal,
-            Integer idEmpresa) {
+            Integer idEmpresa, Date nuevaVisita) {
         Cliente miCliente = GestorPrincipal.em.find(Cliente.class, id);
         if (nombre != null)
             miCliente.setNombre(nombre);
@@ -32,6 +33,8 @@ public class GestorCliente {
             miCliente.setComercialPrincipal(comercialPrincipal);
         if (idEmpresa != null)
             miCliente.setIdEmpresa(idEmpresa);
+        if (nuevaVisita != null)
+            miCliente.insertarVisita(nuevaVisita);
 
         GestorPrincipal.em.getTransaction().begin();
         GestorPrincipal.em.merge(miCliente);

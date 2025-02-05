@@ -1,9 +1,11 @@
 package edu.cesur;
 
+import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.transaction.SystemException;
 
 @Entity
 public class Cliente {
@@ -18,9 +20,12 @@ public class Cliente {
     private String apellido2;
     private String comercialPrincipal;
     private int idEmpresa;
+    private Date[] visitas;
+    private final static int MAX_VISITAS = 5;
 
     // constructores
     public Cliente() {
+        this.visitas = new Date[MAX_VISITAS];
     }
 
     public Cliente(String nombre, String apellido1, String apellido2, String comercialPrincipal, int idEmpresa) {
@@ -30,8 +35,10 @@ public class Cliente {
         this.apellido2 = apellido2;
         this.comercialPrincipal = comercialPrincipal;
         this.idEmpresa = idEmpresa;
+        this.visitas = new Date[MAX_VISITAS];
     }
 
+    // métodos
     public Long getId() {
         return id;
     }
@@ -80,6 +87,63 @@ public class Cliente {
     public String toString() {
         return "Cliente [id=" + id + ", nombre=" + nombre + ", apellido1=" + apellido1 + ", apellido2=" + apellido2
                 + ", comercialPrincipal=" + comercialPrincipal + ", idEmpresa=" + idEmpresa + "]";
+    }
+
+    public Date[] getVisitas() {
+        return visitas;
+    }
+
+    public void setVisitas(Date[] visitas) {
+        this.visitas = visitas;
+    }
+
+    public static int getMaxVisitas() {
+        return MAX_VISITAS;
+    }
+
+    public boolean insertarVisita(Date nuevaVisita) {
+        int hueco = 0;
+
+        while (hueco < (visitas.length)) {
+
+            if (visitas[hueco] == null) {
+                visitas[hueco] = nuevaVisita;
+                ordenarVisitas();
+                return true;
+
+            }
+
+            hueco++;
+
+        }
+
+        return false;
+
+    }
+
+    public void ordenarVisitas() {
+        Date visitaPivote = new Date(2500, 01, 01);
+        int i = 0;
+        int j;
+
+        while ((i < visitas.length) && (visitas[i] != null)) {
+            j = 1;
+            while ((j < visitas.length - i) && (visitas[j] != null)) {
+                if ((visitas[j - 1].compareTo(visitas[j]) > 0)) {
+                    visitaPivote = visitas[j - 1];
+                    visitas[j - 1] = visitas[j];
+                    visitas[j] = visitaPivote;
+
+                }
+
+                j++;
+
+            }
+
+            i++;
+
+        }
+
     }
 
 }
